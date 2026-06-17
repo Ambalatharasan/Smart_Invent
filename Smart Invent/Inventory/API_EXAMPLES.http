@@ -1,0 +1,81 @@
+### Login as a verified user
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "your-verified-user@example.com",
+  "password": "your-password"
+}
+
+### Set this manually after login in REST Client
+@token = paste-token-here
+
+### Inventory list
+GET http://localhost:8080/api/inventory
+Authorization: Bearer {{token}}
+
+### Search inventory
+GET http://localhost:8080/api/inventory?search=coffee
+Authorization: Bearer {{token}}
+
+### Create inventory item
+POST http://localhost:8080/api/inventory
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "sku": "TEA-500",
+  "name": "Assam Breakfast Tea",
+  "category": "Grocery",
+  "supplier": "Valley Tea Co",
+  "quantity": 30,
+  "reorderPoint": 12,
+  "unitCost": 3.25,
+  "retailPrice": 8.99,
+  "leadTimeDays": 5,
+  "location": "Aisle 1",
+  "notes": "Premium shelf",
+  "lastRestockDate": "2026-05-27",
+  "lastRestockQuantity": 30
+}
+
+### Adjust stock
+PATCH http://localhost:8080/api/inventory/1/stock
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "quantityChange": 12,
+  "reason": "Supplier delivery received"
+}
+
+### Restock summary
+GET http://localhost:8080/api/restock/summary
+Authorization: Bearer {{token}}
+
+### Create restock order
+POST http://localhost:8080/api/restock/orders
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "itemId": 2,
+  "requestedQuantity": 24
+}
+
+### Mark restock order received
+PATCH http://localhost:8080/api/restock/orders/1/status
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "status": "RECEIVED"
+}
+
+### Managers
+GET http://localhost:8080/api/managers
+Authorization: Bearer {{token}}
+
+### Activity logs
+GET http://localhost:8080/api/activity
+Authorization: Bearer {{token}}

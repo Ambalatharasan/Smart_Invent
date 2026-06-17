@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Smart Invent Access</title>
+    <link rel="icon" href="/assets/smart-invent-logo.png" />
+    <script>
+      const stockwiseTheme = localStorage.getItem("stockwise.theme") || "light";
+      document.documentElement.dataset.theme = stockwiseTheme;
+      document.documentElement.classList.toggle("dark", stockwiseTheme === "dark");
+      window.stockwiseTailwindConfig = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ["Inter", "Segoe UI", "Arial", "sans-serif"],
+            },
+          },
+        },
+      };
+      window.tailwind = { config: window.stockwiseTailwindConfig };
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = window.stockwiseTailwindConfig;
+    </script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.5.2/flowbite.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/auth.css?v=smart-invent-auth-password-request" />
+  </head>
+  <body class="auth-page bg-gray-50 text-gray-900 antialiased dark:bg-gray-900 dark:text-white">
+    <main class="auth-main">
+      <section class="auth-container auth-shell grid w-full max-w-6xl overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-xl shadow-gray-200/60 dark:border-gray-700 dark:bg-gray-800 dark:shadow-black/30 lg:grid-cols-[0.95fr_1fr]">
+        <aside class="auth-brand-panel relative hidden flex-col overflow-hidden bg-slate-950 text-white lg:flex">
+          <div class="relative flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <img src="/assets/smart-invent-logo.png" alt="Smart Invent logo" class="brand-logo h-14 w-14 rounded-xl object-cover" />
+              <span>
+                <strong class="block text-xl">Smart Invent</strong>
+                <small class="block text-sm text-cyan-100">Inventory Manager</small>
+              </span>
+            </div>
+            <button class="theme-toggle inline-flex h-11 w-11 items-center justify-center rounded-lg border border-white/20 bg-white/10 text-white hover:bg-white/15" type="button" id="themeToggle" aria-label="Toggle dark theme">
+              <span class="theme-toggle-icon" aria-hidden="true"></span>
+            </button>
+          </div>
+
+          <div class="auth-brand-copy relative max-w-xl">
+            <p class="mb-4 text-sm font-bold uppercase text-cyan-200">Industrial Operations Console</p>
+            <h1 class="auth-heading font-black">Inventory command starts here.</h1>
+            <p class="text-lg leading-8 text-slate-200">Sign in or create a verified staff account to continue to the live Smart Invent dashboard.</p>
+          </div>
+        </aside>
+
+        <section class="auth-form-panel flex flex-col justify-center px-5 py-8 sm:px-10 lg:px-14">
+          <div class="auth-mobile-brand mb-8 flex items-center justify-between lg:hidden">
+            <div class="flex items-center gap-3">
+              <img src="/assets/smart-invent-logo.png" alt="Smart Invent logo" class="brand-logo h-12 w-12 rounded-xl object-cover" />
+              <span>
+                <strong class="block text-lg">Smart Invent</strong>
+                <small class="block text-sm text-gray-500 dark:text-gray-400">Inventory Manager</small>
+              </span>
+            </div>
+            <button class="theme-toggle inline-flex h-11 w-11 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700" type="button" id="themeToggleMobile" aria-label="Toggle dark theme">
+              <span class="theme-toggle-icon" aria-hidden="true"></span>
+            </button>
+          </div>
+
+          <div class="auth-form-card mx-auto w-full">
+            <div class="mb-6 grid grid-cols-2 gap-2 rounded-xl border border-gray-200 bg-gray-50 p-1.5 dark:border-gray-700 dark:bg-gray-900" role="tablist" aria-label="Authentication options">
+              <button class="auth-tab is-active rounded-lg px-4 py-3 text-sm font-bold text-gray-500" type="button" data-auth-tab="login">Login</button>
+              <button class="auth-tab rounded-lg px-4 py-3 text-sm font-bold text-gray-500" type="button" data-auth-tab="register">Register</button>
+            </div>
+
+            <form class="auth-form is-active gap-4" id="loginForm">
+              <div>
+                <h2 class="mb-2 text-2xl font-black tracking-normal text-gray-900 dark:text-white sm:text-3xl">Welcome Back</h2>
+                <p class="text-base text-gray-600 dark:text-gray-400">Use your verified Smart Invent account to enter the dashboard.</p>
+              </div>
+
+              <div>
+                <label for="loginEmail" class="mb-2 block text-sm font-bold text-gray-900 dark:text-white">Email</label>
+                <input id="loginEmail" type="email" autocomplete="username" placeholder="Enter email" required class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-3 text-sm text-gray-900 focus:border-cyan-600 focus:ring-cyan-600 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400" />
+              </div>
+
+              <div>
+                <label for="loginPassword" class="mb-2 block text-sm font-bold text-gray-900 dark:text-white">Password</label>
+                <div class="relative">
+                  <input id="loginPassword" type="password" autocomplete="current-password" placeholder="Enter password" required class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-3 pr-12 text-sm text-gray-900 focus:border-cyan-600 focus:ring-cyan-600 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400" />
+                  <button class="password-toggle absolute inset-y-0 right-0 flex w-12 items-center justify-center rounded-r-lg text-gray-500 hover:text-cyan-600 dark:text-gray-300" type="button" data-password-toggle="loginPassword" aria-label="Show password">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z"></path>
+                      <circle cx="12" cy="12" r="3"></circle>
+                    </svg>
+                  </button>
+                </div>
+                <p class="field-error mt-2 text-sm font-semibold text-red-700 dark:text-red-300" id="loginPasswordError" aria-live="polite"></p>
+              </div>
+
+              <div class="flex justify-end">
+                <button class="text-sm font-bold text-cyan-700 hover:text-cyan-800 dark:text-cyan-300 dark:hover:text-cyan-200" type="button" id="forgotPasswordLink">Forgot Password?</button>
+              </div>
+
+              <button class="rounded-lg bg-cyan-600 px-5 py-3 text-center text-sm font-bold text-white hover:bg-cyan-700 focus:outline-none focus:ring-4 focus:ring-cyan-300 dark:focus:ring-cyan-800" type="submit">Login</button>
+              <button class="rounded-lg border border-gray-200 bg-white px-5 py-3 text-center text-sm font-bold text-gray-900 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700" type="button" id="showVerifyButton" hidden>Verify email address</button>
+              <p class="form-message text-sm font-bold text-red-700 dark:text-red-300" id="loginMessage" aria-live="polite"></p>
+            </form>
+
+            <form class="auth-form gap-4" id="registerForm">
+              <div>
+                <h2 class="mb-2 text-2xl font-black tracking-normal text-gray-900 dark:text-white sm:text-3xl">Create Account</h2>
+                <p class="text-base text-gray-600 dark:text-gray-400">Register with your name, email, and password. We will verify your email before login.</p>
+              </div>
+
+              <div>
+                <label for="registerName" class="mb-2 block text-sm font-bold text-gray-900 dark:text-white">Full Name</label>
+                <input id="registerName" type="text" autocomplete="name" placeholder="Enter full name" required class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-3 text-sm text-gray-900 focus:border-cyan-600 focus:ring-cyan-600 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400" />
+              </div>
+
+              <div>
+                <label for="registerEmail" class="mb-2 block text-sm font-bold text-gray-900 dark:text-white">Email</label>
+                <input id="registerEmail" type="email" autocomplete="email" placeholder="Enter email" required class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-3 text-sm text-gray-900 focus:border-cyan-600 focus:ring-cyan-600 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400" />
+              </div>
+
+              <div>
+                <label for="registerPassword" class="mb-2 block text-sm font-bold text-gray-900 dark:text-white">Password</label>
+                <div class="relative">
+                  <input id="registerPassword" type="password" minlength="8" autocomplete="new-password" placeholder="Create password" required class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-3 pr-12 text-sm text-gray-900 focus:border-cyan-600 focus:ring-cyan-600 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400" />
+                  <button class="password-toggle absolute inset-y-0 right-0 flex w-12 items-center justify-center rounded-r-lg text-gray-500 hover:text-cyan-600 dark:text-gray-300" type="button" data-password-toggle="registerPassword" aria-label="Show password">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z"></path>
+                      <circle cx="12" cy="12" r="3"></circle>
+                    </svg>
+                  </button>
+                </div>
+                <p class="mt-2 text-xs font-semibold text-gray-500 dark:text-gray-400">Use at least 8 characters with uppercase, lowercase, and a number. Spaces are not allowed.</p>
+                <p class="field-error mt-2 text-sm font-semibold text-red-700 dark:text-red-300" id="registerPasswordError" aria-live="polite"></p>
+              </div>
+
+              <button class="rounded-lg bg-cyan-600 px-5 py-3 text-center text-sm font-bold text-white hover:bg-cyan-700 focus:outline-none focus:ring-4 focus:ring-cyan-300 dark:focus:ring-cyan-800" type="submit">Create Account</button>
+              <p class="form-message text-sm font-bold text-red-700 dark:text-red-300" id="registerMessage" aria-live="polite"></p>
+            </form>
+
+            <form class="auth-form gap-4" id="forgotPasswordForm">
+              <div>
+                <h2 class="mb-2 text-2xl font-black tracking-normal text-gray-900 dark:text-white sm:text-3xl">Password Help</h2>
+                <p class="text-base text-gray-600 dark:text-gray-400">Enter your registered email. Admin will review the password update request.</p>
+              </div>
+
+              <div>
+                <label for="forgotPasswordEmail" class="mb-2 block text-sm font-bold text-gray-900 dark:text-white">Email</label>
+                <input id="forgotPasswordEmail" type="email" autocomplete="email" placeholder="Enter registered email" required class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-3 text-sm text-gray-900 focus:border-cyan-600 focus:ring-cyan-600 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400" />
+              </div>
+
+              <button class="rounded-lg bg-cyan-600 px-5 py-3 text-center text-sm font-bold text-white hover:bg-cyan-700 focus:outline-none focus:ring-4 focus:ring-cyan-300 dark:focus:ring-cyan-800" type="submit">Send Request</button>
+              <button class="rounded-lg border border-gray-200 bg-white px-5 py-3 text-center text-sm font-bold text-gray-900 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700" type="button" id="backToLoginButton">Back to Login</button>
+              <p class="form-message text-sm font-bold text-red-700 dark:text-red-300" id="forgotPasswordMessage" aria-live="polite"></p>
+            </form>
+
+            <form class="auth-form gap-4" id="verifyForm">
+              <div>
+                <h2 class="mb-2 text-2xl font-black tracking-normal text-gray-900 dark:text-white sm:text-3xl">Verify Email</h2>
+                <p class="text-base text-gray-600 dark:text-gray-400">Enter the verification code sent to your email address.</p>
+              </div>
+
+              <div>
+                <label for="verifyEmail" class="mb-2 block text-sm font-bold text-gray-900 dark:text-white">Email</label>
+                <input id="verifyEmail" type="email" autocomplete="email" placeholder="Enter email" required class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-3 text-sm text-gray-900 focus:border-cyan-600 focus:ring-cyan-600 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400" />
+              </div>
+
+              <div>
+                <label for="verifyCode" class="mb-2 block text-sm font-bold text-gray-900 dark:text-white">Verification Code</label>
+                <input id="verifyCode" class="otp-input block w-full rounded-lg border border-gray-300 bg-gray-50 p-3 text-sm font-bold text-gray-900 focus:border-cyan-600 focus:ring-cyan-600 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400" type="text" inputmode="numeric" maxlength="6" autocomplete="one-time-code" placeholder="Enter 6 digit code" required />
+              </div>
+
+              <button class="rounded-lg bg-cyan-600 px-5 py-3 text-center text-sm font-bold text-white hover:bg-cyan-700 focus:outline-none focus:ring-4 focus:ring-cyan-300 dark:focus:ring-cyan-800" type="submit">Verify Account</button>
+              <button class="rounded-lg border border-gray-200 bg-white px-5 py-3 text-center text-sm font-bold text-gray-900 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700" type="button" id="resendCodeButton">Resend Code</button>
+              <p class="form-message text-sm font-bold text-red-700 dark:text-red-300" id="verifyMessage" aria-live="polite"></p>
+            </form>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <div id="authToast" class="fixed right-5 top-5 z-50 hidden max-w-sm rounded-lg border border-gray-200 bg-white p-4 text-sm font-semibold text-gray-900 shadow-lg dark:border-gray-700 dark:bg-gray-800 dark:text-white" role="status" aria-live="polite"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.5.2/flowbite.min.js"></script>
+    <script src="/auth.js?v=smart-invent-auth-password-request"></script>
+  </body>
+</html>

@@ -1,0 +1,396 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Smart Invent Dashboard</title>
+    <link rel="icon" href="/assets/smart-invent-logo.png" />
+    <script>
+      const stockwiseTheme = localStorage.getItem("stockwise.theme") || "light";
+      document.documentElement.dataset.theme = stockwiseTheme;
+      document.documentElement.classList.toggle("dark", stockwiseTheme === "dark");
+      window.stockwiseTailwindConfig = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ["Inter", "Segoe UI", "Arial", "sans-serif"],
+            },
+          },
+        },
+      };
+      window.tailwind = { config: window.stockwiseTailwindConfig };
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = window.stockwiseTailwindConfig;
+    </script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.5.2/flowbite.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/stockwise-app.css?v=smart-invent-layout-fix" />
+  </head>
+  <body class="app-body h-screen overflow-hidden bg-gray-50 text-gray-900 antialiased dark:bg-gray-900 dark:text-gray-100">
+    <div class="app-shell flex h-screen min-w-0 overflow-hidden">
+      <button class="sidebar-backdrop fixed inset-0 z-30 hidden bg-gray-900/50" type="button" id="sidebarBackdrop" aria-label="Close navigation"></button>
+
+      <aside class="sidebar fixed inset-y-0 left-0 z-40 flex w-72 shrink-0 -translate-x-full flex-col border-r border-gray-200 bg-white transition-transform dark:border-gray-700 dark:bg-gray-800 lg:static lg:translate-x-0" id="sidebar">
+        <div class="brand-strip flex h-20 items-center gap-3 border-b border-gray-200 px-5 dark:border-gray-700">
+          <img src="/assets/smart-invent-logo.png" alt="Smart Invent logo" class="brand-logo h-11 w-11 rounded-xl object-cover" />
+          <span class="min-w-0">
+            <strong class="block truncate text-lg font-black text-gray-900 dark:text-white">Smart Invent</strong>
+            <small class="block truncate text-sm text-gray-500 dark:text-gray-400">Inventory Manager</small>
+          </span>
+        </div>
+
+        <nav class="nav flex-1 space-y-2 overflow-y-auto px-4 py-5">
+          <button class="nav-item is-active" type="button" data-view="dashboard">
+            <span class="nav-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z"></path></svg>
+            </span>
+            <span>Dashboard</span>
+          </button>
+          <button class="nav-item" type="button" data-view="inventory">
+            <span class="nav-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="m21 8-9-5-9 5 9 5z"></path><path d="M3 8v8l9 5 9-5V8"></path><path d="M12 13v8"></path></svg>
+            </span>
+            <span>Inventory</span>
+          </button>
+          <button class="nav-item" type="button" data-view="restock">
+            <span class="nav-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M3 7h11v10H3z"></path><path d="M14 11h4l3 3v3h-7z"></path><path d="M7 17.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM18 17.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"></path></svg>
+            </span>
+            <span>Restock</span>
+          </button>
+          <button class="nav-item" type="button" data-view="managers">
+            <span class="nav-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M16 11a4 4 0 1 0-8 0"></path><path d="M4 21a8 8 0 0 1 16 0"></path><path d="M19 8a3 3 0 0 1 2 5"></path><path d="M3 13a3 3 0 0 1 2-5"></path></svg>
+            </span>
+            <span>Managers</span>
+          </button>
+          <button class="nav-item" type="button" data-view="activity">
+            <span class="nav-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path><path d="M3 4h4"></path><path d="M17 4h4"></path></svg>
+            </span>
+            <span>Activity Center</span>
+          </button>
+          <button class="nav-item" type="button" data-view="settings">
+            <span class="nav-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06A1.7 1.7 0 0 0 15 19.4a1.7 1.7 0 0 0-1 .6 1.7 1.7 0 0 0-.4 1.1V21a2 2 0 1 1-4 0v-.09A1.7 1.7 0 0 0 8.6 19.4a1.7 1.7 0 0 0-1.88.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-.6-1 1.7 1.7 0 0 0-1.1-.4H3a2 2 0 1 1 0-4h.09A1.7 1.7 0 0 0 4.6 8.6a1.7 1.7 0 0 0-.34-1.88l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.7 1.7 0 0 0 9 4.6a1.7 1.7 0 0 0 1-.6 1.7 1.7 0 0 0 .4-1.1V3a2 2 0 1 1 4 0v.09A1.7 1.7 0 0 0 15.4 4.6a1.7 1.7 0 0 0 1.88-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.7 1.7 0 0 0 19.4 9c.39.11.74.32 1 .6.3.28.52.67.6 1.1V11a2 2 0 1 1 0 4h-.09a1.7 1.7 0 0 0-1.51 1z"></path></svg>
+            </span>
+            <span>Settings</span>
+          </button>
+        </nav>
+
+        <div class="m-4 rounded-xl border border-gray-200 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-900/60">
+          <span class="text-xs font-bold uppercase text-gray-500 dark:text-gray-400">Signed in as</span>
+          <strong class="mt-2 block break-words text-sm text-gray-900 dark:text-white" id="sessionUser">Not connected</strong>
+          <button class="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-lg border border-gray-200 bg-white px-4 py-2.5 text-sm font-bold text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700" type="button" id="logoutButton">
+            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M10 17l5-5-5-5M15 12H3M21 4v16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            Logout
+          </button>
+        </div>
+      </aside>
+
+      <div class="main-wrapper flex min-w-0 flex-1 flex-col">
+        <header class="topbar z-20 flex min-h-16 shrink-0 items-center justify-between gap-4 border-b border-gray-200 bg-white px-4 dark:border-gray-700 dark:bg-gray-800 sm:px-6 lg:px-8">
+          <div class="flex min-w-0 items-center gap-4">
+            <button class="sidebar-toggle inline-flex h-11 w-11 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700 lg:hidden" type="button" id="sidebarToggle" aria-label="Open navigation" aria-controls="sidebar" aria-expanded="false">
+              <span class="sr-only">Open navigation</span>
+              <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+              </svg>
+            </button>
+            <div class="min-w-0">
+              <p class="text-xs font-bold uppercase text-cyan-700 dark:text-cyan-300">Smart Invent Operations Console</p>
+              <h1 class="truncate text-2xl font-bold tracking-tight text-gray-900 dark:text-white lg:text-3xl">Inventory Command Center</h1>
+            </div>
+          </div>
+
+          <div class="flex shrink-0 flex-wrap items-center justify-end gap-2">
+            <button class="inline-flex h-11 w-11 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700" type="button" id="themeToggle" aria-label="Toggle dark theme">
+              <span class="theme-toggle-icon" aria-hidden="true"></span>
+            </button>
+            <button class="hidden rounded-lg bg-slate-800 px-4 py-2.5 text-sm font-bold text-white hover:bg-slate-900 dark:bg-gray-700 dark:hover:bg-gray-600 sm:inline-flex" type="button" id="refreshButton">Refresh</button>
+            <button class="rounded-lg bg-cyan-600 px-4 py-2.5 text-sm font-bold text-white hover:bg-cyan-700 focus:outline-none focus:ring-4 focus:ring-cyan-300 dark:focus:ring-cyan-800" type="button" id="openAddItem">Add Item</button>
+            <div class="relative">
+              <button class="flex h-11 items-center gap-2 rounded-lg border border-gray-200 bg-white px-3 text-sm font-bold text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700" type="button" id="profileMenuButton" aria-expanded="false">
+                <img src="/assets/smart-invent-logo.png" alt="" class="h-7 w-7 rounded-full object-cover" />
+                <span class="hidden max-w-28 truncate md:inline" id="profileName">User</span>
+              </button>
+              <div class="profile-menu absolute right-0 top-12 z-30 hidden w-64 rounded-xl border border-gray-200 bg-white p-3 shadow-xl dark:border-gray-700 dark:bg-gray-800" id="profileMenu">
+                <p class="text-xs font-bold uppercase text-gray-500 dark:text-gray-400">Account</p>
+                <strong class="mt-1 block text-sm text-gray-900 dark:text-white" id="profileMenuName">Smart Invent User</strong>
+                <span class="block break-words text-sm text-gray-500 dark:text-gray-400" id="profileMenuEmail"></span>
+                <button class="mt-3 w-full rounded-lg border border-gray-200 bg-white px-4 py-2 text-sm font-bold text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700" type="button" id="profileLogoutButton">Logout</button>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <main class="main-content min-w-0 flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
+          <section class="metric-grid mb-6 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-6" id="metricGrid"></section>
+
+          <section class="view is-active" id="dashboardView">
+            <div class="mb-6 flex flex-col gap-3 rounded-xl border border-gray-200 bg-white p-5 shadow-sm dark:border-gray-700 dark:bg-gray-800 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <h2 class="text-2xl font-black tracking-normal text-gray-900 dark:text-white">Dashboard</h2>
+                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Live inventory analytics, restock pressure, and recent operational activity.</p>
+              </div>
+              <span class="inline-flex w-fit items-center rounded-full bg-green-100 px-3 py-1 text-xs font-bold text-green-800 dark:bg-green-900/40 dark:text-green-200" id="apiStatus">Waiting for login</span>
+            </div>
+
+            <div class="grid grid-cols-1 gap-6 xl:grid-cols-2">
+              <section class="chart-card">
+                <div class="mb-4 flex items-start justify-between gap-3">
+                  <div>
+                    <h3 class="text-lg font-black text-gray-900 dark:text-white">Inventory Status</h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Healthy, low, and out-of-stock split.</p>
+                  </div>
+                </div>
+                <div class="chart-box" id="inventoryStatusChart"></div>
+              </section>
+
+              <section class="chart-card">
+                <div class="mb-4">
+                  <h3 class="text-lg font-black text-gray-900 dark:text-white">Category-wise Stock</h3>
+                  <p class="text-sm text-gray-500 dark:text-gray-400">Units on hand by category.</p>
+                </div>
+                <div class="chart-box" id="categoryStockChart"></div>
+              </section>
+
+              <section class="chart-card">
+                <div class="mb-4">
+                  <h3 class="text-lg font-black text-gray-900 dark:text-white">Monthly Restock Trend</h3>
+                  <p class="text-sm text-gray-500 dark:text-gray-400">Requested restock quantity over time.</p>
+                </div>
+                <div class="chart-box" id="monthlyRestockChart"></div>
+              </section>
+
+              <section class="chart-card">
+                <div class="mb-4">
+                  <h3 class="text-lg font-black text-gray-900 dark:text-white">Inventory Value Trend</h3>
+                  <p class="text-sm text-gray-500 dark:text-gray-400">Inventory value grouped by update month.</p>
+                </div>
+                <div class="chart-box" id="inventoryValueChart"></div>
+              </section>
+            </div>
+
+            <div class="mt-6 grid grid-cols-1 gap-6 xl:grid-cols-[1.1fr_0.9fr]">
+              <section class="panel-card">
+                <div class="mb-4 flex items-center justify-between gap-3">
+                  <div>
+                    <h3 class="text-lg font-black text-gray-900 dark:text-white">Low Stock Watchlist</h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Items requiring urgent replenishment.</p>
+                  </div>
+                  <button class="rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-bold text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700" type="button" data-jump="inventory-low">Open</button>
+                </div>
+                <div class="table-wrapper">
+                  <table class="flow-table min-w-[720px]">
+                    <thead>
+                      <tr>
+                        <th>Item</th>
+                        <th>Item.Num</th>
+                        <th>Current Qty</th>
+                        <th>Reorder Level</th>
+                        <th>Status</th>
+                      </tr>
+                    </thead>
+                    <tbody id="dashboardLowStockRows"></tbody>
+                  </table>
+                </div>
+              </section>
+
+              <section class="panel-card">
+                <div class="mb-4">
+                  <h3 class="text-lg font-black text-gray-900 dark:text-white">Recent Activity</h3>
+                  <p class="text-sm text-gray-500 dark:text-gray-400">Latest audit events across the operation.</p>
+                </div>
+                <div class="space-y-3" id="recentActivityRows"></div>
+              </section>
+            </div>
+          </section>
+
+          <section class="view" id="inventoryView">
+            <section class="panel-card">
+              <div class="mb-5 flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
+                <div>
+                  <h2 class="text-2xl font-black tracking-normal text-gray-900 dark:text-white">Inventory</h2>
+                  <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Search, filter, edit, and receive live product records.</p>
+                </div>
+                <div class="grid gap-2 sm:grid-cols-2 lg:grid-cols-[minmax(220px,1fr)_160px_160px]">
+                  <input id="inventorySearch" type="search" placeholder="Search item, Item.Num, supplier..." class="rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-cyan-600 focus:ring-cyan-600 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400" />
+                  <select id="statusFilter" class="rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-cyan-600 focus:ring-cyan-600 dark:border-gray-600 dark:bg-gray-700 dark:text-white">
+                    <option value="">All status</option>
+                    <option value="HEALTHY">Healthy</option>
+                    <option value="LOW">Low</option>
+                    <option value="OUT">Out</option>
+                  </select>
+                  <select id="categoryFilter" class="rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-cyan-600 focus:ring-cyan-600 dark:border-gray-600 dark:bg-gray-700 dark:text-white">
+                    <option value="">All categories</option>
+                  </select>
+                </div>
+              </div>
+              <div class="table-wrapper">
+                <table class="flow-table min-w-[1040px]">
+                  <thead>
+                    <tr>
+                      <th>Item.Num</th>
+                      <th>Item</th>
+                      <th>Category</th>
+                      <th>Quantity</th>
+                      <th>Reorder Level</th>
+                      <th>Status</th>
+                      <th>Last Restock Date</th>
+                      <th>Last Restock Quantity</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody id="inventoryRows"></tbody>
+                </table>
+              </div>
+            </section>
+          </section>
+
+          <section class="view" id="restockView">
+            <div class="grid grid-cols-1 gap-6 xl:grid-cols-[1.15fr_0.85fr]">
+              <section class="panel-card">
+                <div class="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                  <div>
+                    <h2 class="text-2xl font-black tracking-normal text-gray-900 dark:text-white">Restock Planner</h2>
+                    <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Suggested orders from low and out-of-stock items.</p>
+                  </div>
+                  <strong class="rounded-lg bg-cyan-50 px-4 py-2 text-lg font-black text-cyan-800 dark:bg-cyan-900/40 dark:text-cyan-200" id="restockBudget">₹0.00</strong>
+                </div>
+                <div id="restockCards" class="grid gap-4"></div>
+              </section>
+
+              <section class="panel-card">
+                <h2 class="text-2xl font-black tracking-normal text-gray-900 dark:text-white">Recent Restock Orders</h2>
+                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Created and received replenishment orders.</p>
+                <div id="orderList" class="mt-5 grid gap-4"></div>
+              </section>
+            </div>
+          </section>
+
+          <section class="view" id="managersView">
+            <section class="panel-card">
+              <div class="mb-5">
+                <h2 class="text-2xl font-black tracking-normal text-gray-900 dark:text-white">Managers</h2>
+                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Select a manager to review contact details, assigned inventory, and open issues.</p>
+              </div>
+              <div class="manager-workspace grid grid-cols-1 gap-5 xl:grid-cols-[360px_minmax(0,1fr)]">
+                <div class="rounded-xl border border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-900/40">
+                  <div class="flex items-center justify-between border-b border-gray-200 p-4 dark:border-gray-700">
+                    <span class="text-xs font-black uppercase text-gray-500 dark:text-gray-400">Manager List</span>
+                    <strong class="grid h-8 min-w-8 place-items-center rounded-full bg-cyan-100 px-2 text-sm text-cyan-800 dark:bg-cyan-900/50 dark:text-cyan-200" id="managerListCount">0</strong>
+                  </div>
+                  <div class="manager-list grid gap-3 overflow-y-auto p-3" id="managerList"></div>
+                </div>
+                <aside class="manager-detail-panel rounded-xl border border-gray-200 bg-white p-5 dark:border-gray-700 dark:bg-gray-800" id="managerDetail"></aside>
+              </div>
+            </section>
+          </section>
+
+          <section class="view" id="activityView">
+            <section class="panel-card">
+              <div class="mb-5 flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
+                <div>
+                  <h2 class="text-2xl font-black tracking-normal text-gray-900 dark:text-white">Activity Center</h2>
+                  <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Audit and event timeline for stock, restock, and notes.</p>
+                </div>
+                <div class="grid w-full gap-3 xl:max-w-4xl">
+                  <div class="segmented-control" aria-label="Activity type filter">
+                    <button class="segment is-active" type="button" data-activity-type="">All Activity</button>
+                    <button class="segment" type="button" data-activity-type="STOCK_ADJUSTED">Stock Adjusted</button>
+                    <button class="segment" type="button" data-activity-type="RESTOCK_ORDERED">Restock Ordered</button>
+                    <button class="segment" type="button" data-activity-type="NOTE">Notes</button>
+                  </div>
+                  <div class="segmented-control" aria-label="Activity date filter">
+                    <button class="segment is-active" type="button" data-activity-date="">All Dates</button>
+                    <button class="segment" type="button" data-activity-date="today">Today</button>
+                    <button class="segment" type="button" data-activity-date="week">This Week</button>
+                    <button class="segment" type="button" data-activity-date="month">This Month</button>
+                  </div>
+                  <form id="activityForm" class="grid gap-2 sm:grid-cols-[1fr_auto]">
+                    <input id="activityNote" type="text" placeholder="Add audit note..." class="rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-cyan-600 focus:ring-cyan-600 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400" />
+                    <button class="rounded-lg bg-cyan-600 px-4 py-2.5 text-sm font-bold text-white hover:bg-cyan-700" type="submit">Add Note</button>
+                  </form>
+                </div>
+              </div>
+              <div class="table-wrapper">
+                <table class="flow-table min-w-[760px]">
+                  <thead>
+                    <tr>
+                      <th>Type</th>
+                      <th>Activity</th>
+                      <th>Logged By</th>
+                      <th>Logged Date</th>
+                    </tr>
+                  </thead>
+                  <tbody id="activityRows"></tbody>
+                </table>
+              </div>
+            </section>
+          </section>
+
+          <section class="view" id="settingsView">
+            <section class="panel-card max-w-4xl">
+              <h2 class="text-2xl font-black tracking-normal text-gray-900 dark:text-white">Settings</h2>
+              <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Local interface preferences and current backend connection status.</p>
+              <div class="mt-6 grid gap-4 sm:grid-cols-2">
+                <article class="rounded-xl border border-gray-200 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-900/40">
+                  <span class="text-xs font-black uppercase text-gray-500 dark:text-gray-400">Theme</span>
+                  <strong class="mt-2 block text-lg text-gray-900 dark:text-white" id="settingsTheme">Light</strong>
+                  <button class="mt-4 rounded-lg bg-cyan-600 px-4 py-2.5 text-sm font-bold text-white hover:bg-cyan-700" type="button" id="settingsThemeToggle">Toggle Theme</button>
+                </article>
+                <article class="rounded-xl border border-gray-200 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-900/40">
+                  <span class="text-xs font-black uppercase text-gray-500 dark:text-gray-400">API Status</span>
+                  <strong class="mt-2 block text-lg text-gray-900 dark:text-white" id="settingsApiStatus">Connected</strong>
+                  <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">Authenticated REST API calls are served by Spring Boot.</p>
+                </article>
+              </div>
+            </section>
+          </section>
+        </main>
+      </div>
+    </div>
+
+    <dialog id="itemDialog" class="w-[min(880px,calc(100vw-24px))] rounded-2xl border-0 bg-transparent p-0 text-gray-900 backdrop:bg-gray-900/60 dark:text-white">
+      <form id="itemForm" class="rounded-2xl border border-gray-200 bg-white p-5 shadow-2xl dark:border-gray-700 dark:bg-gray-800 sm:p-6">
+        <div class="mb-5 flex items-start justify-between gap-4">
+          <div>
+            <h2 class="text-2xl font-black tracking-normal text-gray-900 dark:text-white" id="itemDialogTitle">Add Inventory Item</h2>
+            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Inventory records are saved through the secured backend API.</p>
+          </div>
+          <button type="button" class="grid h-10 w-10 place-items-center rounded-lg border border-gray-200 bg-white text-gray-500 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700" id="closeItemDialog" aria-label="Close">x</button>
+        </div>
+        <div class="grid gap-4 md:grid-cols-2">
+          <label class="form-label">Item.Num<input name="sku" id="itemNumInput" readonly class="form-input" placeholder="Auto-generated on save" /></label>
+          <label class="form-label">Item Name<input name="name" required class="form-input" placeholder="Item name" /></label>
+          <label class="form-label">Category<select name="category" id="itemCategory" required class="form-input"></select></label>
+          <label class="form-label hidden" id="customCategoryWrap">Enter New Category<input name="customCategory" id="customCategory" class="form-input" placeholder="Enter New Category" /></label>
+          <label class="form-label">Supplier<input name="supplier" required class="form-input" placeholder="Supplier" /></label>
+          <label class="form-label">Quantity<input name="quantity" type="number" min="0" value="0" required class="form-input" /></label>
+          <label class="form-label">Reorder Level<input name="reorderPoint" type="number" min="0" value="10" required class="form-input" /></label>
+          <label class="form-label">Unit Cost (₹)<span class="money-input-wrap"><span>₹</span><input name="unitCost" type="number" min="0.01" step="0.01" value="1.00" required class="form-input" /></span></label>
+          <label class="form-label">Retail Price (₹)<span class="money-input-wrap"><span>₹</span><input name="retailPrice" type="number" min="0.01" step="0.01" value="2.00" required class="form-input" /></span></label>
+          <label class="form-label">Lead Time<input name="leadTimeDays" type="number" min="0" value="5" required class="form-input" /></label>
+          <label class="form-label">Location<input name="location" value="Stockroom" required class="form-input" /></label>
+          <label class="form-label">Manager<select name="managerId" id="itemManager" class="form-input"><option value="">Department based</option></select></label>
+          <label class="form-label">Last Restock Date<input name="lastRestockDate" type="date" class="form-input" /></label>
+          <label class="form-label">Last Restock Quantity<input name="lastRestockQuantity" type="number" min="0" class="form-input" /></label>
+        </div>
+        <label class="form-label mt-4">Notes<textarea name="notes" rows="3" class="form-input" placeholder="Operational notes"></textarea></label>
+        <div class="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+          <button type="button" class="rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-sm font-bold text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700" id="cancelItem">Cancel</button>
+          <button type="submit" class="rounded-lg bg-cyan-600 px-5 py-2.5 text-sm font-bold text-white hover:bg-cyan-700" id="saveItemButton">Save Item</button>
+        </div>
+      </form>
+    </dialog>
+
+    <div class="toast fixed bottom-5 right-5 z-50 hidden max-w-sm rounded-lg bg-slate-900 px-4 py-3 text-sm font-semibold text-white shadow-xl dark:bg-gray-700" id="toast" role="status" aria-live="polite"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.5.2/flowbite.min.js"></script>
+    <script src="/stockwise-app.js?v=smart-invent-layout-fix"></script>
+  </body>
+</html>
